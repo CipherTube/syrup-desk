@@ -3,316 +3,232 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0a0908">
+<meta name="theme-color" content="#0b0a0d">
 <title>Twisted Syrup — half-time desk</title>
 <style>:root {
-  --ink: #e9e4da;
-  --dim: #8d8578;
-  --bg: #0a0908;
-  --panel: #131110;
-  --panel2: #1a1715;
-  --line: #2a2622;
-  --amber: #d9a05b;
-  --molasses: #b4703f;
-  --red: #c2543c;
-  --teal: #6f9c8f;
+  --ink: #f4f0ff;
+  --dim: #9a92b3;
+  --bg: #0b0a0d;
+  --panel: #151219;
+  --line: #241f2c;
+  --syrup: #c58b4a;
+  --syrup-hot: #e8a55f;
+  --live: #6ee7a8;
+  --warn: #f0b429;
+  --bad: #ef5f6b;
 }
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-html, body {
+body {
   margin: 0;
-  padding: 0;
-  background: var(--bg);
+  background: radial-gradient(1200px 600px at 50% -10%, #1b1520, var(--bg) 60%);
   color: var(--ink);
-  font-family: ui-sans-serif, -apple-system, "Helvetica Neue", Arial, sans-serif;
-  font-size: 15px;
-  line-height: 1.4;
-  overscroll-behavior: none;
+  font: 15px/1.45 "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  padding: 14px 12px 40px;
 }
 
-body {
-  padding: 14px 14px 32px;
-  max-width: 780px;
-  margin: 0 auto;
-}
+#app { max-width: 760px; margin: 0 auto; }
 
 header {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 10px;
-  border-bottom: 1px solid var(--line);
-  padding-bottom: 10px;
   margin-bottom: 14px;
 }
 
 h1 {
-  font-size: 17px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
   margin: 0;
-  font-weight: 600;
-}
-
-h1 span { color: var(--molasses); }
-
-.tag {
-  font-size: 10.5px;
+  font-size: 20px;
   letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--dim);
+  font-weight: 800;
 }
+
+.sub { margin: 2px 0 0; font-size: 11px; letter-spacing: 0.16em; color: var(--dim); }
+
+.chip {
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--dim);
+  border-radius: 999px;
+  padding: 6px 11px;
+  font: inherit;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+.chip.live { color: var(--live); border-color: #2c5f45; }
+.chip.warn { color: var(--warn); border-color: #6b5220; }
+.chip.bad { color: var(--bad); border-color: #6d2b30; }
 
 .panel {
-  background: var(--panel);
+  background: linear-gradient(180deg, #16121b, #121016);
   border: 1px solid var(--line);
-  border-radius: 10px;
-  padding: 12px;
+  border-radius: 16px;
+  padding: 13px;
   margin-bottom: 12px;
 }
 
-.panel h2 {
-  font-size: 10.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--dim);
+h2 {
   margin: 0 0 10px;
-  font-weight: 600;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--dim);
+  font-weight: 700;
 }
 
-.presets {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
+.row { display: flex; gap: 8px; align-items: center; flex-wrap: nowrap; }
+.row.wrap { flex-wrap: wrap; }
+.row.knobs { margin-top: 10px; gap: 14px; }
 
-.preset {
-  background: var(--panel2);
-  border: 1px solid var(--line);
+button {
+  font: inherit;
+  font-size: 13px;
   color: var(--ink);
-  border-radius: 8px;
-  padding: 10px 11px;
+  background: #1e1a25;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  padding: 10px 13px;
+  cursor: pointer;
+}
+button:active { transform: translateY(1px); }
+button.primary { background: var(--syrup); border-color: var(--syrup-hot); color: #201408; font-weight: 700; }
+button.on { background: #3a2740; border-color: var(--syrup); color: var(--syrup-hot); }
+button.mini { padding: 5px 8px; font-size: 11px; border-radius: 8px; }
+
+.chips { display: flex; gap: 7px; overflow-x: auto; padding-bottom: 3px; }
+.chips button {
+  flex: 0 0 auto;
   text-align: left;
-  font-size: 13px;
-  line-height: 1.25;
-  cursor: pointer;
-}
-
-.preset small {
-  display: block;
-  color: var(--dim);
-  font-size: 10.5px;
-  margin-top: 3px;
-  letter-spacing: 0.04em;
-}
-
-.preset.active {
-  border-color: var(--amber);
-  box-shadow: inset 0 0 0 1px rgba(217, 160, 91, 0.35);
-}
-
-.transport {
-  display: flex;
-  gap: 8px;
-  align-items: stretch;
-}
-
-button.act {
-  flex: 1;
-  min-height: 52px;
-  border-radius: 8px;
-  border: 1px solid var(--line);
-  background: var(--panel2);
-  color: var(--ink);
-  font-size: 13px;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button.act.primary {
-  background: linear-gradient(180deg, #2a2018, #1b1410);
-  border-color: var(--molasses);
-  color: #f6e6d2;
-}
-
-button.act:active { transform: translateY(1px); }
-button.act[disabled] { opacity: 0.45; }
-
-.row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.row label {
-  font-size: 10.5px;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--dim);
-  min-width: 62px;
-}
-
-input[type=range] {
-  flex: 1;
-  accent-color: var(--amber);
-  height: 28px;
-}
-
-.readout {
-  font-variant-numeric: tabular-nums;
   font-size: 12px;
-  color: var(--amber);
-  min-width: 58px;
-  text-align: right;
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: 46px repeat(16, 1fr);
-  gap: 3px;
-  align-items: center;
-}
-
-.grid .lane {
-  font-size: 9.5px;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  line-height: 1.3;
+  padding: 8px 11px;
   color: var(--dim);
 }
+.chips button small { display: block; font-size: 10px; color: #6f6889; letter-spacing: 0.06em; }
+.chips button.sel { border-color: var(--syrup); color: var(--ink); background: #241c26; }
 
-.step {
-  aspect-ratio: 1 / 1;
-  min-height: 22px;
-  background: var(--panel2);
-  border: 1px solid var(--line);
-  border-radius: 3px;
-  cursor: pointer;
+.field { display: flex; align-items: center; gap: 8px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--dim); flex: 1; min-width: 0; }
+.field output { min-width: 52px; text-align: right; color: var(--ink); letter-spacing: 0.04em; }
+input[type="range"] { -webkit-appearance: none; appearance: none; flex: 1; height: 26px; background: transparent; min-width: 0; }
+input[type="range"]::-webkit-slider-runnable-track { height: 4px; background: #2a2434; border-radius: 2px; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 18px; height: 18px; border-radius: 50%; background: var(--syrup); margin-top: -7px; border: 2px solid #1a131c; }
+input[type="range"]::-moz-range-track { height: 4px; background: #2a2434; border-radius: 2px; }
+input[type="range"]::-moz-range-thumb { width: 16px; height: 16px; border: none; border-radius: 50%; background: var(--syrup); }
+
+select {
+  font: inherit; font-size: 12px; color: var(--ink);
+  background: #1e1a25; border: 1px solid var(--line);
+  border-radius: 9px; padding: 8px; max-width: 100%;
 }
 
-.step.beat { background: #171412; }
-.step.on { background: var(--molasses); border-color: var(--amber); }
-.step.on.kick { background: var(--amber); }
-.step.on.snare { background: var(--red); }
-.step.on.hat { background: var(--teal); }
+.hint { margin: 9px 0 0; font-size: 11.5px; color: var(--dim); line-height: 1.5; }
 
-.meter {
-  height: 8px;
-  background: #121010;
-  border: 1px solid var(--line);
-  border-radius: 4px;
-  overflow: hidden;
-  margin-top: 10px;
+.mixer { display: flex; gap: 9px; overflow-x: auto; padding-bottom: 4px; }
+.strip { flex: 0 0 108px; background: #120f16; border: 1px solid var(--line); border-radius: 12px; padding: 9px 8px; }
+.strip.master { border-color: #4a3520; background: #1a1410; }
+.strip h3 { margin: 0 0 7px; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--dim); font-weight: 700; text-align: center; }
+.strip .meter { height: 5px; border-radius: 3px; background: #241f2c; overflow: hidden; margin-bottom: 8px; }
+.strip .meter i { display: block; height: 100%; width: 0; background: linear-gradient(90deg, var(--live), var(--syrup)); transition: width 70ms linear; }
+.strip .lab { display: flex; justify-content: space-between; font-size: 9px; letter-spacing: 0.08em; color: #6f6889; text-transform: uppercase; margin: 6px 0 1px; }
+.strip input[type="range"] { height: 22px; }
+.strip .btns { display: flex; gap: 5px; margin-top: 7px; }
+.strip .btns button { flex: 1; padding: 5px 0; font-size: 10px; border-radius: 7px; }
+.strip .btns button.m { color: var(--bad); }
+.strip .btns button.s { color: var(--warn); }
+.strip .btns button.m.on { background: #3a1f23; color: #ffb3b8; }
+.strip .btns button.s.on { background: #3a3018; color: #ffe0a3; }
+
+.grid { display: grid; grid-template-columns: 54px repeat(16, 1fr); gap: 4px; }
+.grid .lane { font-size: 9.5px; letter-spacing: 0.1em; color: var(--dim); display: flex; align-items: center; text-transform: uppercase; }
+.cell { aspect-ratio: 1; border-radius: 5px; background: #1b1722; border: 1px solid #241f2c; padding: 0; min-height: 18px; }
+.cell.on { background: var(--syrup); border-color: var(--syrup-hot); }
+.cell:nth-child(4n + 2) { border-color: #2f2839; }
+
+.keys { display: flex; gap: 4px; overflow-x: auto; padding-bottom: 3px; }
+.key {
+  flex: 0 0 46px; height: 62px; border-radius: 0 0 8px 8px;
+  background: linear-gradient(180deg, #efe9f7, #cdc3dc); border: 1px solid #0b0a0d;
+  color: #1a1520; font-size: 10px; font-weight: 700; display: flex; align-items: flex-end;
+  justify-content: center; padding-bottom: 6px; letter-spacing: 0.04em;
 }
-
-.meter > i {
-  display: block;
-  height: 100%;
-  width: 0%;
-  background: linear-gradient(90deg, var(--teal), var(--amber), var(--red));
-  transition: width 60ms linear;
-}
-
-.status {
-  font-size: 11.5px;
-  color: var(--dim);
-  margin-top: 8px;
-  min-height: 16px;
-  font-variant-numeric: tabular-nums;
-}
-
-.io {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-}
-
-.io button, select {
-  min-height: 42px;
-  background: var(--panel2);
-  border: 1px solid var(--line);
-  color: var(--ink);
-  border-radius: 8px;
-  font-size: 12px;
-  padding: 0 10px;
-}
-
-.io button:active { transform: translateY(1px); }
-
-.note {
-  font-size: 11px;
-  color: var(--dim);
-  margin-top: 10px;
-  line-height: 1.5;
-}
-
-.note b { color: var(--ink); font-weight: 600; }
+.key.black { background: linear-gradient(180deg, #2a2434, #14101a); color: #cfc6e0; height: 56px; flex-basis: 34px; margin: 0 -6px; z-index: 2; }
+.key.down { background: linear-gradient(180deg, var(--syrup-hot), var(--syrup)); color: #2a1a08; }
+.key.black.down { background: linear-gradient(180deg, #8a6a3a, #5b4322); color: #fff3e2; }
 
 @media (max-width: 420px) {
-  .grid { grid-template-columns: 38px repeat(16, 1fr); }
-  .step { min-height: 17px; }
-  .presets { grid-template-columns: 1fr; }
+  .grid { grid-template-columns: 40px repeat(16, 1fr); gap: 3px; }
+  .cell { min-height: 15px; }
 }
 </style>
 </head>
 <body>
-<header>
-  <h1>Twisted <span>Syrup</span></h1>
-  <div class="tag">half-time desk · 60–68</div>
-</header>
+<div id="app">
+  <header>
+    <div class="brand">
+      <h1>TWISTED SYRUP</h1>
+      <p class="sub">HALF-TIME DESK · 60–68 BPM</p>
+    </div>
+    <button id="audiostate" class="chip" type="button">audio: idle</button>
+  </header>
 
-<div class="panel">
-  <h2>Blueprint</h2>
-  <div class="presets" id="presets"></div>
+  <section class="panel" id="blueprints">
+    <h2>Blueprint</h2>
+    <div id="presets" class="chips"></div>
+  </section>
+
+  <section class="panel" id="transport-panel">
+    <h2>Transport</h2>
+    <div class="row">
+      <button id="play" class="primary" type="button">play</button>
+      <button id="tape" type="button">tape stop</button>
+      <button id="stutter" type="button">stutter</button>
+      <button id="bounce" type="button">bounce wav</button>
+    </div>
+    <div class="row knobs">
+      <label class="field"><span>tempo</span><input id="bpm" type="range" min="60" max="68" value="64"><output id="bpmOut">64 bpm</output></label>
+      <label class="field"><span>screw</span><input id="screw" type="range" min="-9" max="0" step="1" value="-4"><output id="screwOut">-4 st</output></label>
+    </div>
+    <p class="hint" id="status">press play. 64 bpm, C minor, 808 glide at 96 ms.</p>
+  </section>
+
+  <section class="panel" id="mixer-panel">
+    <h2>Mixer</h2>
+    <div class="mixer" id="mixer"></div>
+  </section>
+
+  <section class="panel" id="keyboard-panel">
+    <h2>808 Keyboard</h2>
+    <div class="keys" id="keys"></div>
+    <p class="hint">click a key, or play on the computer keyboard. z and x shift octave.</p>
+  </section>
+
+  <section class="panel" id="grid-panel">
+    <h2>Grid · 16 steps</h2>
+    <div class="grid" id="grid"></div>
+    <p class="hint">tap a cell to paint or clear a hit. hats print as triplets, the 808 glides between its two notes, the kick ducks the sub.</p>
+  </section>
+
+  <section class="panel" id="io-panel">
+    <h2>Output &amp; input</h2>
+    <div class="row wrap">
+      <button id="testtone" type="button">test speakers</button>
+      <button id="search" type="button">search devices</button>
+      <button id="bt" type="button">bluetooth speaker</button>
+    </div>
+    <label class="field"><span>output</span><select id="outputs"><option value="">system output</option></select></label>
+    <label class="field"><span>input</span><select id="inputs"><option value="">no input</option></select></label>
+    <div class="row wrap">
+      <button id="mic" type="button">arm mic</button>
+      <button id="upload" type="button">upload audio</button>
+      <input id="file" type="file" accept="audio/*" hidden>
+    </div>
+    <p class="hint" id="iohint">search devices finds speakers, headphones and microphones. Bluetooth speakers show up there once the phone is paired. Anything you bring in is pitched, soft-clipped and sent through the same cavern.</p>
+  </section>
 </div>
-
-<div class="panel">
-  <h2>Transport</h2>
-  <div class="transport">
-    <button class="act primary" id="play">play</button>
-    <button class="act" id="tape">tape stop</button>
-    <button class="act" id="stutter">stutter</button>
-  </div>
-  <div class="row">
-    <label for="bpm">tempo</label>
-    <input type="range" id="bpm" min="60" max="68" step="1" value="64">
-    <div class="readout" id="bpmOut">64 bpm</div>
-  </div>
-  <div class="row">
-    <label for="screw">screw</label>
-    <input type="range" id="screw" min="-6" max="0" step="1" value="-4">
-    <div class="readout" id="screwOut">-4 st</div>
-  </div>
-  <div class="meter"><i id="meterFill"></i></div>
-  <div class="status" id="position">stopped</div>
-  <div class="status" id="status"></div>
-</div>
-
-<div class="panel">
-  <h2>Grid · 16 steps</h2>
-  <div class="grid" id="grid"></div>
-  <div class="note">Tap a cell to paint or clear a hit. Hats print as triplets, the 808 glides between its two notes, and the kick ducks the sub on every hit.</div>
-</div>
-
-<div class="panel">
-  <h2>Output &amp; input</h2>
-  <div class="io">
-    <button id="test">test speakers</button>
-    <button id="scan">find devices</button>
-    <select id="outputs"><option value="">system output</option></select>
-    <button id="mic">arm mic</button>
-    <button id="bounce">bounce wav</button>
-    <label class="io" style="display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:8px;min-height:42px;font-size:12px;cursor:pointer;">
-      upload audio
-      <input type="file" id="upload" accept="audio/*" style="display:none">
-    </label>
-  </div>
-  <div class="note">Anything you bring in is pitched, soft-clipped, and sent through the same cavern as the session. <b>Bounce</b> prints the whole arrangement, screw included.</div>
-</div>
-
 <script>/* syrup-engine.js — Twisted Syrup audio engine.
  * Pure Web Audio, no DOM. Runs in the browser and in Node (node-web-audio-api),
  * so the exact graph that ships is the graph under test.
@@ -457,7 +373,23 @@ input[type=range] {
     limiter.attack.value = 0.002;
     limiter.release.value = 0.12;
 
-    turntable.connect(master);
+    // master strip: three bands, then left/right balance, then the fader
+    var masterLow = ctx.createBiquadFilter();
+    masterLow.type = 'lowshelf';
+    masterLow.frequency.value = 80;
+    var masterMid = ctx.createBiquadFilter();
+    masterMid.type = 'peaking';
+    masterMid.frequency.value = 1200;
+    masterMid.Q.value = 0.9;
+    var masterHigh = ctx.createBiquadFilter();
+    masterHigh.type = 'highshelf';
+    masterHigh.frequency.value = 7000;
+    var masterPan = ctx.createStereoPanner();
+    turntable.connect(masterLow);
+    masterLow.connect(masterMid);
+    masterMid.connect(masterHigh);
+    masterHigh.connect(masterPan);
+    masterPan.connect(master);
     master.connect(limiter);
     limiter.connect(ctx.destination);
 
@@ -467,16 +399,55 @@ input[type=range] {
     analyser.smoothingTimeConstant = 0.6;
     master.connect(analyser);
 
-    function bus(gain) {
-      var g = ctx.createGain();
-      g.gain.value = gain;
-      g.connect(turntable);
-      return g;
+    // six strips: input -> sub/mid/high -> balance -> fader -> turntable
+    var channels = {};
+    function strip(name, initial) {
+      var input = ctx.createGain();
+      var low = ctx.createBiquadFilter();
+      low.type = 'lowshelf';
+      low.frequency.value = 90;
+      var mid = ctx.createBiquadFilter();
+      mid.type = 'peaking';
+      mid.frequency.value = 950;
+      mid.Q.value = 1;
+      var high = ctx.createBiquadFilter();
+      high.type = 'highshelf';
+      high.frequency.value = 6500;
+      var pan = ctx.createStereoPanner();
+      var fader = ctx.createGain();
+      fader.gain.value = initial;
+      input.connect(low);
+      low.connect(mid);
+      mid.connect(high);
+      high.connect(pan);
+      pan.connect(fader);
+      fader.connect(turntable);
+      var c = {
+        name: name, input: input, low: low, mid: mid, high: high,
+        pan: pan, fader: fader, level: initial, muted: false, soloed: false
+      };
+      channels[name] = c;
+      return c;
     }
-    var drumsBus = bus(0.9);
-    var subBus = bus(1.0);
-    var melodyBus = bus(0.5);
-    var chopBus = bus(0.55);
+
+    var drumsStrip = strip('drums', 0.9);
+    var subStrip = strip('sub', 1.0);
+    var melodyStrip = strip('melody', 0.5);
+    var chopStrip = strip('chop', 0.55);
+    var washStrip = strip('wash', 0.6);
+    var drumsBus = drumsStrip.input;
+    var subBus = subStrip.input;
+    var melodyBus = melodyStrip.input;
+    var chopBus = chopStrip.input;
+
+    function applyChannelMix() {
+      var anySolo = Object.keys(channels).some(function (k) { return channels[k].soloed; });
+      Object.keys(channels).forEach(function (k) {
+        var c = channels[k];
+        var live = anySolo ? c.soloed : !c.muted;
+        c.fader.gain.setTargetAtTime(live ? c.level : 0, ctx.currentTime, 0.02);
+      });
+    }
 
     // ---------------- cavernous wash (aux return, 100% wet)
     var washInput = ctx.createGain();
@@ -489,7 +460,7 @@ input[type=range] {
     washInput.connect(preDelay);
     preDelay.connect(cavern);
     cavern.connect(cavernReturn);
-    cavernReturn.connect(turntable);
+    cavernReturn.connect(washStrip.input);
 
     var delayL = ctx.createDelay(3);
     var delayR = ctx.createDelay(3);
@@ -510,7 +481,7 @@ input[type=range] {
     delayR.connect(panR);
     panL.connect(delayReturn);
     panR.connect(delayReturn);
-    delayReturn.connect(turntable);
+    delayReturn.connect(washStrip.input);
     delayL.connect(damp);
     damp.connect(feedback);
     feedback.connect(delayL);
@@ -851,6 +822,111 @@ input[type=range] {
       osc.stop(t + (seconds || 0.8) + 0.05);
     }
 
+    // ---------------- playable 808 keyboard
+    var keyVoice = null;
+
+    function noteOn(midi, velocity) {
+      var t = ctx.currentTime + 0.01;
+      var target = midiToFreq(midi) * Math.pow(2, state.screw / 12);
+      if (keyVoice) {
+        keyVoice.osc.frequency.setTargetAtTime(target, t, state.glideMs / 2000);
+        return;
+      }
+      var osc = ctx.createOscillator();
+      var env = ctx.createGain();
+      osc.type = 'sine';
+      if (subPrevFreq > 0) {
+        osc.frequency.setValueAtTime(subPrevFreq, t);
+        osc.frequency.exponentialRampToValueAtTime(target, t + state.glideMs / 1000);
+      } else {
+        osc.frequency.setValueAtTime(target, t);
+      }
+      subPrevFreq = target;
+      var v = clamp(velocity == null ? 0.8 : velocity, 0.1, 1);
+      env.gain.setValueAtTime(0.0001, t);
+      env.gain.exponentialRampToValueAtTime(v, t + 0.012);
+      osc.connect(env);
+      env.connect(subShaper);
+      osc.start(t);
+      keyVoice = { osc: osc, env: env };
+    }
+
+    function noteOff() {
+      if (!keyVoice) return;
+      var t = ctx.currentTime;
+      var v = keyVoice;
+      keyVoice = null;
+      v.env.gain.cancelScheduledValues(t);
+      v.env.gain.setValueAtTime(Math.max(0.0002, v.env.gain.value), t);
+      v.env.gain.exponentialRampToValueAtTime(0.0001, t + 0.25);
+      try { v.osc.stop(t + 0.3); } catch (e) {}
+    }
+
+    // straight to the speakers, nothing in between, for checking the device
+    function testToneDirect(seconds) {
+      var t = ctx.currentTime + 0.02;
+      var osc = ctx.createOscillator();
+      var env = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.value = 220;
+      env.gain.setValueAtTime(0.0001, t);
+      env.gain.exponentialRampToValueAtTime(0.3, t + 0.03);
+      env.gain.exponentialRampToValueAtTime(0.0001, t + (seconds || 0.9));
+      osc.connect(env);
+      env.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + (seconds || 0.9) + 0.05);
+    }
+
+    function dbToGain(db) {
+      // biquad gain is expressed in dB, so it is clamped, not converted
+      return clamp(db, -24, 12);
+    }
+
+    function setChannel(name, opts) {
+      var c = channels[name];
+      if (!c || !opts) return null;
+      if (opts.level != null) c.level = clamp(opts.level, 0, 1.5);
+      if (opts.pan != null) c.pan.pan.setTargetAtTime(clamp(opts.pan, -1, 1), ctx.currentTime, 0.02);
+      if (opts.sub != null) c.low.gain.setTargetAtTime(dbToGain(opts.sub), ctx.currentTime, 0.02);
+      if (opts.mid != null) c.mid.gain.setTargetAtTime(dbToGain(opts.mid), ctx.currentTime, 0.02);
+      if (opts.high != null) c.high.gain.setTargetAtTime(dbToGain(opts.high), ctx.currentTime, 0.02);
+      if (opts.muted != null) c.muted = !!opts.muted;
+      if (opts.soloed != null) c.soloed = !!opts.soloed;
+      applyChannelMix();
+      return c;
+    }
+
+    function setMaster(opts) {
+      if (!opts) return null;
+      if (opts.level != null) master.gain.setTargetAtTime(clamp(opts.level, 0, 1.5), ctx.currentTime, 0.02);
+      if (opts.pan != null) masterPan.pan.setTargetAtTime(clamp(opts.pan, -1, 1), ctx.currentTime, 0.02);
+      if (opts.sub != null) masterLow.gain.setTargetAtTime(dbToGain(opts.sub), ctx.currentTime, 0.02);
+      if (opts.mid != null) masterMid.gain.setTargetAtTime(dbToGain(opts.mid), ctx.currentTime, 0.02);
+      if (opts.high != null) masterHigh.gain.setTargetAtTime(dbToGain(opts.high), ctx.currentTime, 0.02);
+      return { level: master.gain.value };
+    }
+
+    // ---------------- anything brought in from outside
+    // uploaded audio, a microphone or another app, softened and sent through
+    // the same 808 saturation and the cavern, never straight past the chain
+    function externalInput() {
+      var inNode = ctx.createGain();
+      var sat = ctx.createWaveShaper();
+      sat.curve = softClipCurve(1.8);
+      sat.oversample = '2x';
+      var tilt = ctx.createBiquadFilter();
+      tilt.type = 'highpass';
+      tilt.frequency.value = 45;
+      inNode.connect(sat);
+      sat.connect(tilt);
+      tilt.connect(turntable);
+      sendToWash(tilt, 0.35);
+      return { input: inNode, rate: function (semitones) {
+        return Math.pow(2, semitones / 12);
+      } };
+    }
+
     function nowPlayingTime() {
       var p = bank[state.preset];
       var sec = barSeconds();
@@ -873,9 +949,30 @@ input[type=range] {
     engine.tapeStop = tapeStop;
     engine.stutter = stutter;
     engine.testTone = testTone;
+    engine.testToneDirect = testToneDirect;
+    engine.noteOn = noteOn;
+    engine.noteOff = noteOff;
+    engine.setChannel = setChannel;
+    engine.externalInput = externalInput;
+    engine.setMaster = setMaster;
+    engine.applyChannelMix = applyChannelMix;
+    engine.channels = channels;
+    engine.masterPan = masterPan;
+    engine.masterLow = masterLow;
+    engine.masterMid = masterMid;
+    engine.masterHigh = masterHigh;
     engine.nowPlayingTime = nowPlayingTime;
     engine.scheduleBar = scheduleBar;
     engine.totalBars = totalBars;
+    engine.firstHeavyBar = function () {
+      var acc = 0;
+      var secs = bank[state.preset].sections;
+      for (var i = 0; i < secs.length; i++) {
+        if (secs[i].mode === 'heavy') return acc;
+        acc += secs[i].bars;
+      }
+      return 0;
+    };
     engine.barSeconds = barSeconds;
     engine.chordForBar = chordForBar;
     engine.sectionForBar = sectionForBar;
@@ -906,130 +1003,473 @@ input[type=range] {
   };
 });
 </script>
-<script>/* ui.js — the desk surface. Everything audio lives in syrup-engine.js. */
-
-(function () {
-  'use strict';
-
-  var LANES = [
-    { id: 'kick', label: 'kick' },
-    { id: 'snare', label: 'snare' },
-    { id: 'hat', label: 'hat' },
-    { id: 'chop', label: 'chop' }
-  ];
-
+<script>(function () {
   var ctx = null;
-  var engine = null;
+  var engine = null;      // real, once the user has touched the page
+  var preview = null;     // offline twin, for building the desk with no autoplay risk
+  var mixState = {};
+  var masterState = { level: 0.72, pan: 0, sub: 0, mid: 0, high: 0 };
   var meterTimer = null;
   var micStream = null;
-  var uploadNode = null;
+  var micNode = null;
+  var uploadSource = null;
+  var octave = 0;
+  var held = {};
 
-  var el = {};
+  var CHANNELS = [
+    { key: 'drums', label: 'Drums' },
+    { key: 'sub', label: '808 Sub' },
+    { key: 'melody', label: 'Melody' },
+    { key: 'chop', label: 'Chop' },
+    { key: 'wash', label: 'Wash' }
+  ];
 
-  function $(id) { return document.getElementById(id); }
+  function active() { return engine || preview; }
 
-  function status(msg) { el.status.textContent = msg; }
+  function makePreview() {
+    try {
+      var Off = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+      return SyrupEngine.createSyrup(new Off(2, 4410, 44100), { preset: 'reign' });
+    } catch (e) {
+      return null;
+    }
+  }
 
+  function $ (id) { return document.getElementById(id); }
+  function el() { return { play: $('play'), tape: $('tape'), stutter: $('stutter'), bounce: $('bounce'),
+      bpm: $('bpm'), bpmOut: $('bpmOut'), screw: $('screw'), screwOut: $('screwOut'),
+      status: $('status'), presets: $('presets'), grid: $('grid'), mixer: $('mixer'),
+      keys: $('keys'), chip: $('audiostate'), outputs: $('outputs'), inputs: $('inputs'),
+      file: $('file'), iohint: $('iohint') }; }
+
+  function status(text) { el().status.textContent = text; }
+
+  // ---------------------------------------------------------------- audio in
   function ensureAudio() {
     if (ctx) {
       if (ctx.state === 'suspended') ctx.resume();
       return ctx;
     }
     var Ctor = window.AudioContext || window.webkitAudioContext;
+    if (!Ctor) { status('this browser has no Web Audio. try Chrome or Safari.'); return null; }
     ctx = new Ctor({ latencyHint: 'interactive' });
-    engine = SyrupEngine.createSyrup(ctx, { preset: 'reign' });
+    engine = SyrupEngine.createSyrup(ctx, {
+      preset: active() ? active().state.preset : 'reign'
+    });
+    pushMixState();
     startMeter();
+    paintAudioState();
+    setInterval(paintAudioState, 700);
     return ctx;
   }
 
+  function pushMixState() {
+    if (!engine) return;
+    Object.keys(mixState).forEach(function (name) {
+      engine.setChannel(name, mixState[name]);
+    });
+    engine.setMaster(masterState);
+    engine.setBpm(preview ? preview.state.bpm : engine.state.bpm);
+    engine.setScrew(preview ? preview.state.screw : engine.state.screw);
+  }
+
+  function paintAudioState() {
+    var chip = el().chip;
+    if (!ctx) { chip.textContent = 'audio: idle'; chip.className = 'chip'; return; }
+    var s = ctx.state;
+    chip.textContent = 'audio: ' + s;
+    chip.className = 'chip ' + (s === 'running' ? 'live' : s === 'suspended' ? 'warn' : 'bad');
+  }
+
+  // Unlock on the first touch anywhere, not only on play, so a suspended
+  // context never looks like a dead app.
+  document.addEventListener('pointerdown', function unlock() {
+    ensureAudio();
+    if (ctx && ctx.state === 'suspended') ctx.resume().then(paintAudioState).catch(function () {});
+  }, { once: false });
+
   function startMeter() {
+    if (!engine) return;
     var data = new Uint8Array(engine.analyser.fftSize);
     if (meterTimer) clearInterval(meterTimer);
     meterTimer = setInterval(function () {
       engine.analyser.getByteTimeDomainData(data);
       var peak = 0;
-      for (var i = 0; i < data.length; i++) {
-        var v = Math.abs(data[i] - 128) / 128;
-        if (v > peak) peak = v;
-      }
-      el.meterFill.style.width = Math.min(100, Math.round(peak * 130)) + '%';
-      if (engine.state.playing) {
-        var p = engine.nowPlayingTime();
-        el.position.textContent = 'bar ' + (p.bar + 1) + ' / ' + engine.totalBars() + ' · ' + p.section;
-      }
-    }, 90);
+      for (var i = 0; i < data.length; i++) peak = Math.max(peak, Math.abs(data[i] - 128) / 128);
+      var bar = document.querySelector('.strip.master .meter i');
+      if (bar) bar.style.width = Math.min(100, peak * 130) + '%';
+    }, 60);
   }
 
+  // ---------------------------------------------------------------- presets
   function renderPresets() {
-    el.presets.innerHTML = '';
-    Object.keys(engine.presets).forEach(function (key) {
-      var p = engine.presets[key];
+    var box = el().presets;
+    box.innerHTML = '';
+    var bank = active().presets;
+    Object.keys(bank).forEach(function (key) {
+      var p = bank[key];
       var b = document.createElement('button');
-      b.className = 'preset' + (engine.state.preset === key ? ' active' : '');
-      b.innerHTML = p.name + '<small>' + p.bpm + ' bpm · ' + p.screw + ' st · ' +
-        (p.scale === 'dorian' ? 'dorian' : 'minor') + '</small>';
+      b.type = 'button';
+      if (key === active().state.preset) b.className = 'sel';
+      b.innerHTML = p.name + '<small>' + p.bpm + ' bpm · ' + p.screw + ' st · ' + (p.scale || 'minor') + '</small>';
       b.onclick = function () {
         ensureAudio();
-        engine.setPreset(key);
-        engine.state.screw = p.screw;
-        el.bpm.value = p.bpm;
-        el.bpmOut.textContent = p.bpm + ' bpm';
-        el.screw.value = p.screw;
-        el.screwOut.textContent = p.screw + ' st';
+        if (engine) engine.setPreset(key);
+        if (preview) preview.setPreset(key);
+        syncTransport();
         renderPresets();
         renderGrid();
-        status(p.name + ' loaded. Press play.');
+        status(p.name + ' loaded. press play.');
       };
-      el.presets.appendChild(b);
+      box.appendChild(b);
     });
   }
 
+  function syncTransport() {
+    var e = el();
+    e.bpm.value = engine.state.bpm;
+    e.bpmOut.textContent = engine.state.bpm + ' bpm';
+    e.screw.value = engine.state.screw;
+    e.screwOut.textContent = engine.state.screw + ' st';
+  }
+
+  // ---------------------------------------------------------------- mixer
+  function buildStrip(name, label, isMaster) {
+    var wrap = document.createElement('div');
+    wrap.className = 'strip' + (isMaster ? ' master' : '');
+    wrap.innerHTML = '<h3>' + label + '</h3>' +
+      '<div class="meter"><i></i></div>' +
+      '<div class="lab"><span>level</span><span data-out="level"></span></div>' +
+      '<input type="range" data-ctl="level" min="0" max="1.4" step="0.02">' +
+      '<div class="lab"><span>L / R</span><span data-out="pan"></span></div>' +
+      '<input type="range" data-ctl="pan" min="-1" max="1" step="0.05">' +
+      '<div class="lab"><span>sub</span><span data-out="sub"></span></div>' +
+      '<input type="range" data-ctl="sub" min="-24" max="12" step="1">' +
+      '<div class="lab"><span>mid</span><span data-out="mid"></span></div>' +
+      '<input type="range" data-ctl="mid" min="-24" max="12" step="1">' +
+      '<div class="lab"><span>high</span><span data-out="high"></span></div>' +
+      '<input type="range" data-ctl="high" min="-24" max="12" step="1">' +
+      (isMaster ? '' : '<div class="btns"><button type="button" class="m" data-act="mute">M</button><button type="button" class="s" data-act="solo">S</button></div>');
+    return wrap;
+  }
+
+  function wireStrip(wrap, name, isMaster) {
+    var state;
+    if (isMaster) {
+      state = masterState;
+    } else {
+      if (!mixState[name]) {
+        var ch = active().channels[name];
+        mixState[name] = { level: ch ? ch.level : 0.8, pan: 0, sub: 0, mid: 0, high: 0, muted: false, soloed: false };
+      }
+      state = mixState[name];
+    }
+
+    function show() {
+      ['level', 'pan', 'sub', 'mid', 'high'].forEach(function (k) {
+        var out = wrap.querySelector('[data-out="' + k + '"]');
+        if (!out) return;
+        out.textContent = k === 'pan' ? (state.pan === 0 ? 'C' : state.pan < 0 ? 'L' + Math.round(-state.pan * 100) : 'R' + Math.round(state.pan * 100))
+          : k === 'level' ? Math.round(state.level * 100) + '%'
+          : (state[k] > 0 ? '+' : '') + state[k] + 'dB';
+      });
+      wrap.querySelectorAll('input[data-ctl]').forEach(function (inp) {
+        inp.value = state[inp.dataset.ctl];
+      });
+    }
+
+    wrap.querySelectorAll('input[data-ctl]').forEach(function (inp) {
+      inp.oninput = function () {
+        ensureAudio();
+        var k = inp.dataset.ctl;
+        var v = Number(inp.value);
+        state[k] = v;
+        if (isMaster) {
+          masterState[k] = v;
+          if (engine) engine.setMaster(masterState);
+        } else {
+          mixState[name][k] = v;
+          if (engine) { var o = {}; o[k] = v; engine.setChannel(name, o); }
+        }
+        show();
+      };
+    });
+
+    if (!isMaster) {
+      var mute = wrap.querySelector('[data-act="mute"]');
+      var solo = wrap.querySelector('[data-act="solo"]');
+      mute.onclick = function () {
+        ensureAudio();
+        var on = !mute.classList.contains('on');
+        mute.classList.toggle('on', on);
+        mixState[name].muted = on;
+        if (engine) engine.setChannel(name, { muted: on });
+        status(name + (on ? ' muted' : ' unmuted'));
+      };
+      solo.onclick = function () {
+        ensureAudio();
+        var on = !solo.classList.contains('on');
+        solo.classList.toggle('on', on);
+        mixState[name].soloed = on;
+        if (engine) engine.setChannel(name, { soloed: on });
+        status(on ? 'solo ' + name : 'solo off');
+      };
+    }
+    show();
+    return state;
+  }
+
+  function renderMixer() {
+    var box = el().mixer;
+    box.innerHTML = '';
+    CHANNELS.forEach(function (c) {
+      var wrap = buildStrip(c.key, c.label, false);
+      box.appendChild(wrap);
+      wireStrip(wrap, c.key, false);
+    });
+    var master = buildStrip('master', 'Master', true);
+    box.appendChild(master);
+    wireStrip(master, 'master', true);
+  }
+
+  // ---------------------------------------------------------------- grid
+  var LANES = [
+    { key: 'kick', label: 'Kick' },
+    { key: 'snare', label: 'Snare' },
+    { key: 'hat', label: 'Hat' },
+    { key: 'chop', label: 'Chop' }
+  ];
+
   function renderGrid() {
-    var preset = engine.presets[engine.state.preset];
-    el.grid.innerHTML = '';
+    var box = el().grid;
+    box.innerHTML = '';
+    var p = active().presets[active().state.preset];
     LANES.forEach(function (lane) {
-      var label = document.createElement('div');
-      label.className = 'lane';
-      label.textContent = lane.label;
-      el.grid.appendChild(label);
-      var events = preset.lanes[lane.id] || [];
-      for (var i = 0; i < 16; i++) {
-        var cell = document.createElement('div');
-        cell.className = 'step' + (i % 4 === 0 ? ' beat' : '');
-        var hit = events.filter(function (e) { return e[0] === i; })[0];
-        if (hit) cell.className += ' on ' + lane.id;
-        cell.dataset.lane = lane.id;
-        cell.dataset.step = String(i);
+      var tag = document.createElement('div');
+      tag.className = 'lane';
+      tag.textContent = lane.label;
+      box.appendChild(tag);
+      for (var s = 0; s < 16; s++) {
+        var cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'cell';
+        cell.dataset.lane = lane.key;
+        cell.dataset.step = s;
+        var hit = (p.lanes[lane.key] || []).some(function (e) { return e[0] === s; });
+        if (hit) cell.classList.add('on');
         cell.onclick = function (ev) {
           ensureAudio();
-          var target = ev.currentTarget;
-          var l = target.dataset.lane;
-          var s = Number(target.dataset.step);
-          var on = target.classList.contains('on');
-          engine.paint(l, s, on ? 0 : 0.8);
+          var t = ev.currentTarget;
+          var on = t.classList.contains('on');
+          if (engine) engine.paint(t.dataset.lane, Number(t.dataset.step), on ? 0 : 0.8);
+          if (preview) preview.paint(t.dataset.lane, Number(t.dataset.step), on ? 0 : 0.8);
           renderGrid();
         };
-        el.grid.appendChild(cell);
+        box.appendChild(cell);
       }
     });
   }
 
+  // ---------------------------------------------------------------- keyboard
+  var WHITE = [0, 2, 4, 5, 7, 9, 11];
+  var BLACK = [1, 3, 6, 8, 10];
+  var KEYMAP = { a: 0, w: 1, s: 2, e: 3, d: 4, f: 5, t: 6, g: 7, y: 8, h: 9, u: 10, j: 11, k: 12 };
+
+  function noteFor(keyIndex) {
+    var e = active();
+    var root = e.presets[e.state.preset].root + 12 * octave;
+    return root + keyIndex;
+  }
+
+  function renderKeys() {
+    var box = el().keys;
+    box.innerHTML = '';
+    for (var i = 0; i < 24; i++) {
+      var semi = i % 12;
+      var isBlack = BLACK.indexOf(semi) >= 0;
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'key' + (isBlack ? ' black' : '');
+      b.dataset.note = i;
+      b.textContent = '';
+      b.onpointerdown = function (ev) {
+        var t = ev.currentTarget;
+        press(Number(t.dataset.note), t);
+      };
+      b.onpointerup = b.onpointerleave = function (ev) {
+        release(Number(ev.currentTarget.dataset.note), ev.currentTarget);
+      };
+      box.appendChild(b);
+    }
+  }
+
+  function press(noteIndex, node) {
+    ensureAudio();
+    engine.noteOn(noteFor(noteIndex), 0.85);
+    if (node) node.classList.add('down');
+  }
+
+  function release(noteIndex, node) {
+    engine.noteOff();
+    if (node) node.classList.remove('down');
+  }
+
+  window.addEventListener('keydown', function (ev) {
+    if (ev.target && /input|select|textarea/i.test(ev.target.tagName)) return;
+    if (ev.key === 'z') { octave = Math.max(-1, octave - 1); status('octave ' + octave); return; }
+    if (ev.key === 'x') { octave = Math.min(1, octave + 1); status('octave ' + octave); return; }
+    var idx = KEYMAP[ev.key.toLowerCase()];
+    if (idx == null || held[ev.key]) return;
+    held[ev.key] = true;
+    var node = document.querySelector('.key[data-note="' + idx + '"]');
+    press(idx, node);
+  });
+
+  window.addEventListener('keyup', function (ev) {
+    var idx = KEYMAP[ev.key.toLowerCase()];
+    if (idx == null) return;
+    held[ev.key] = false;
+    var node = document.querySelector('.key[data-note="' + idx + '"]');
+    release(idx, node);
+  });
+
+  // ---------------------------------------------------------------- transport
   function togglePlay() {
     ensureAudio();
+    if (!ctx) return;
+    if (ctx.state === 'suspended') ctx.resume();
     if (engine.state.playing) {
       engine.stop();
-      el.play.textContent = 'play';
-      el.play.classList.add('primary');
+      el().play.textContent = 'play';
+      el().play.classList.add('primary');
       status('stopped');
     } else {
       engine.start();
-      el.play.textContent = 'stop';
-      el.play.classList.remove('primary');
+      el().play.textContent = 'stop';
+      el().play.classList.remove('primary');
       var p = engine.presets[engine.state.preset];
       status(p.name + ' · ' + engine.state.bpm + ' bpm · screw ' + engine.state.screw + ' st');
     }
   }
 
+  // ---------------------------------------------------------------- devices
+  function fill(select, devices, kind, fallback) {
+    select.innerHTML = '';
+    var first = document.createElement('option');
+    first.value = '';
+    first.textContent = fallback;
+    select.appendChild(first);
+    devices.forEach(function (d, i) {
+      if (d.kind !== kind) return;
+      var o = document.createElement('option');
+      o.value = d.deviceId;
+      o.textContent = d.label || (kind === 'audiooutput' ? 'output ' + (i + 1) : 'input ' + (i + 1));
+      select.appendChild(o);
+    });
+    if (select.options.length === 1) {
+      var o = document.createElement('option');
+      o.value = 'none';
+      o.textContent = 'no ' + (kind === 'audiooutput' ? 'outputs' : 'inputs') + ' found';
+      o.disabled = true;
+      select.appendChild(o);
+    }
+  }
+
+  async function searchDevices() {
+    ensureAudio();
+    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
+      el().iohint.textContent = 'this browser does not list devices. use the system output.';
+      return [];
+    }
+    var devices = await navigator.mediaDevices.enumerateDevices();
+    fill(el().outputs, devices, 'audiooutput', 'system output');
+    fill(el().inputs, devices, 'audioinput', 'no input');
+    var outs = devices.filter(function (d) { return d.kind === 'audiooutput'; });
+    el().iohint.textContent = outs.length + ' output' + (outs.length === 1 ? '' : 's') + ' found. ' +
+      'names appear once the browser has permission for a device, so arm the mic or press test speakers first.';
+    return devices;
+  }
+
+  async function routeOutput(deviceId) {
+    ensureAudio();
+    if (!deviceId) return;
+    // Chrome and Edge can move a running context; Safari cannot.
+    if (ctx && typeof ctx.setSinkId === 'function') {
+      try {
+        await ctx.setSinkId(deviceId);
+        el().iohint.textContent = 'playing through the selected device.';
+        return;
+      } catch (e) {
+        el().iohint.textContent = 'the browser refused that device, staying on the system output.';
+        return;
+      }
+    }
+    if (typeof HTMLMediaElement !== 'undefined' && HTMLMediaElement.prototype.setSinkId) {
+      el().iohint.textContent = 'this browser routes media elements, not Web Audio. open in Chrome to switch live.';
+      return;
+    }
+    el().iohint.textContent = 'this browser cannot switch output inside the page. use the phone system output.';
+  }
+
+  async function bluetooth() {
+    var devices = await searchDevices();
+    var bt = devices.filter(function (d) {
+      return d.kind === 'audiooutput' && /bluetooth|bt |airpods|beats|jbl|bose|speaker/i.test(d.label || '');
+    });
+    if (bt.length) {
+      await routeOutput(bt[0].deviceId);
+      el().iohint.textContent = 'sent to ' + (bt[0].label || 'the bluetooth speaker') + '. press test speakers.';
+      status('bluetooth: ' + (bt[0].label || 'speaker'));
+    } else {
+      el().iohint.textContent = 'no bluetooth speaker in the list yet. pair it in the phone settings, then press search devices and pick it under output.';
+      status('no bluetooth speaker found');
+    }
+  }
+
+  async function armMic() {
+    ensureAudio();
+    if (micStream) {
+      micStream.getTracks().forEach(function (t) { t.stop(); });
+      micStream = null;
+      if (micNode) { try { micNode.disconnect(); } catch (e) {} micNode = null; }
+      status('mic off');
+      return;
+    }
+    try {
+      var want = el().inputs.value;
+      micStream = await navigator.mediaDevices.getUserMedia({
+        audio: want ? { deviceId: { exact: want } } : true
+      });
+      var src = ctx.createMediaStreamSource(micStream);
+      var hp = ctx.createBiquadFilter();
+      hp.type = 'highpass';
+      hp.frequency.value = 90;
+      src.connect(hp);
+      hp.connect(engine.master);
+      micNode = src;
+      status('mic armed. it goes through the master, high-passed at 90 Hz.');
+    } catch (e) {
+      status('mic refused: ' + (e && e.name ? e.name : 'blocked'));
+    }
+  }
+
+  async function playUpload(file) {
+    ensureAudio();
+    var buf = await file.arrayBuffer();
+    var audio = await ctx.decodeAudioData(buf);
+    if (uploadSource) { try { uploadSource.stop(); } catch (e) {} }
+    var ext = engine.externalInput();
+    var src = ctx.createBufferSource();
+    src.buffer = audio;
+    src.playbackRate.value = Math.pow(2, engine.state.screw / 12);
+    src.connect(ext.input);
+    src.start();
+    ext.input.gain.value = 0.9;
+    uploadSource = src;
+    status('playing ' + file.name + ' at screw ' + engine.state.screw + ' st through the cavern');
+  }
+
+  // ---------------------------------------------------------------- bounce
   function encodeWav(buffer) {
     var channels = buffer.numberOfChannels;
     var length = buffer.length;
@@ -1048,191 +1488,95 @@ input[type=range] {
     data.setUint16(34, 16, true);
     str(36, 'data');
     data.setUint32(40, length * channels * 2, true);
-    var offset = 44;
+    var off = 44;
     var chans = [];
     for (var c = 0; c < channels; c++) chans.push(buffer.getChannelData(c));
     for (var i = 0; i < length; i++) {
       for (var ch = 0; ch < channels; ch++) {
-        var s = Math.max(-1, Math.min(1, chans[ch][i]));
-        data.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7fff, true);
-        offset += 2;
+        var v = Math.max(-1, Math.min(1, chans[ch][i]));
+        data.setInt16(off, v < 0 ? v * 0x8000 : v * 0x7fff, true);
+        off += 2;
       }
     }
     return new Blob([data], { type: 'audio/wav' });
   }
 
-  function download(blob, name) {
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement('a');
-    a.href = url;
-    a.download = name;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(function () { URL.revokeObjectURL(url); a.remove(); }, 1500);
-  }
-
-  function bounce() {
+  async function bounce() {
     ensureAudio();
     var bars = engine.totalBars();
-    var seconds = bars * engine.barSeconds() + 4;
-    var sr = ctx.sampleRate;
-    status('bouncing ' + bars + ' bars, screw included...');
-    var off = new (window.OfflineAudioContext || window.webkitOfflineAudioContext)(2, Math.ceil(seconds * sr), sr);
-    var inner = SyrupEngine.createSyrup(off, { preset: engine.state.preset });
-    inner.state.bpm = engine.state.bpm;
-    inner.state.screw = engine.state.screw;
-    for (var b = 0; b < bars; b++) {
-      inner.scheduleBar(b, 0.05 + b * inner.barSeconds());
-    }
-    off.startRendering().then(function (buffer) {
-      var name = engine.presets[engine.state.preset].name
-        .toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      download(encodeWav(buffer), name + '-syrup.wav');
-      status('bounced ' + Math.round(buffer.duration) + 's of audio');
-    }).catch(function (err) {
-      status('bounce failed: ' + err.message);
-    });
-  }
-
-  async function listOutputs() {
-    if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) {
-      status('this browser cannot list outputs');
-      return;
-    }
-    var devices = await navigator.mediaDevices.enumerateDevices();
-    var outs = devices.filter(function (d) { return d.kind === 'audiooutput'; });
-    el.outputs.innerHTML = '<option value="">system output</option>';
-    outs.forEach(function (d, i) {
-      var o = document.createElement('option');
-      o.value = d.deviceId;
-      o.textContent = d.label || ('output ' + (i + 1));
-      el.outputs.appendChild(o);
-    });
-    status(outs.length ? outs.length + ' output(s) found' : 'no labelled outputs; allow mic access to reveal them');
-  }
-
-  async function chooseOutput() {
-    ensureAudio();
-    var id = el.outputs.value;
-    if (!id) { status('using the system output'); return; }
-    if (!ctx.setSinkId) { status('this browser cannot switch outputs; sound stays on system'); return; }
+    status('bouncing ' + bars + ' bars…');
+    var make = function (len, rate) { return new OfflineAudioContext(2, len, rate); };
     try {
-      await ctx.setSinkId(id);
-      status('output switched');
-      engine.testTone(0.4);
+      var rendered = await engine.renderBarRange(make, 0, bars, 44100);
+      var blob = encodeWav(rendered);
+      var a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'twisted-syrup-' + engine.state.preset + '-' + engine.state.bpm + 'bpm.wav';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      status('bounced ' + bars + ' bars to wav');
     } catch (e) {
-      status('device refused; stayed on system output');
+      status('bounce failed: ' + (e && e.message ? e.message : 'renderer error'));
     }
   }
 
-  async function armMic() {
-    ensureAudio();
-    if (micStream) {
-      micStream.getTracks().forEach(function (t) { t.stop(); });
-      micStream = null;
-      status('mic off');
-      return;
-    }
-    try {
-      micStream = await navigator.mediaDevices.getUserMedia({
-        audio: { echoCancellation: false, noiseSuppression: false, autoGainControl: false }
-      });
-      var src = ctx.createMediaStreamSource(micStream);
-      var hp = ctx.createBiquadFilter();
-      hp.type = 'highpass';
-      hp.frequency.value = 90;
-      src.connect(hp);
-      hp.connect(engine.master);
-      status('mic armed; it bypasses the wash so it does not fight the 808');
-    } catch (e) {
-      status('no mic access: ' + e.name);
-    }
-  }
-
-  async function loadFile(file) {
-    ensureAudio();
-    status('decoding ' + file.name + '...');
-    try {
-      var buf = await file.arrayBuffer();
-      var audio = await ctx.decodeAudioData(buf);
-      if (uploadNode) { try { uploadNode.stop(); } catch (e) {} }
-      var src = ctx.createBufferSource();
-      src.buffer = audio;
-      src.playbackRate.value = Math.pow(2, engine.state.screw / 12);
-      var shaper = ctx.createWaveShaper();
-      var curve = new Float32Array(1024);
-      for (var i = 0; i < curve.length; i++) {
-        var x = (i / (curve.length - 1)) * 2 - 1;
-        curve[i] = Math.tanh(x * 2.2);
-      }
-      shaper.curve = curve;
-      var send = ctx.createGain();
-      send.gain.value = 0.35;
-      src.connect(shaper);
-      shaper.connect(engine.master);
-      shaper.connect(send);
-      send.connect(engine.buses.wash);
-      src.start();
-      uploadNode = src;
-      status('playing ' + file.name + ' at screw ' + engine.state.screw + ' st through the cavern');
-    } catch (e) {
-      status('could not decode that file: ' + (e.message || e.name));
-    }
-  }
-
-  function wire() {
-    el.play.onclick = togglePlay;
-    el.bounce.onclick = bounce;
-    el.tape.onclick = function () { ensureAudio(); engine.tapeStop(null, 0.55); status('tape stop'); };
-    el.stutter.onclick = function () { ensureAudio(); engine.stutter(null, 60 / engine.state.bpm / 4); status('stutter'); };
-    el.test.onclick = function () { ensureAudio(); engine.testTone(0.8); status('test tone on this output'); };
-    el.outputs.onchange = chooseOutput;
-    el.mic.onclick = armMic;
-    el.scan.onclick = listOutputs;
-    el.upload.onchange = function (e) { if (e.target.files[0]) loadFile(e.target.files[0]); };
-
-    el.bpm.oninput = function () {
-      ensureAudio();
-      var v = engine.setBpm(Number(el.bpm.value));
-      el.bpmOut.textContent = v + ' bpm';
-      status('tempo ' + v + ' bpm');
-    };
-    el.screw.oninput = function () {
-      ensureAudio();
-      var v = engine.setScrew(Number(el.screw.value));
-      el.screwOut.textContent = v + ' st';
-      status('screw ' + v + ' semitones; tempo and pitch drop together');
-    };
-
-    document.addEventListener('keydown', function (e) {
-      if (e.target.tagName === 'INPUT') return;
-      if (e.code === 'Space') { e.preventDefault(); togglePlay(); }
-      if (e.key === 't') { ensureAudio(); engine.tapeStop(null, 0.5); }
-      if (e.key === 's') { ensureAudio(); engine.stutter(null, 0.12); }
-    });
-  }
-
-  function boot() {
-    el = {
-      presets: $('presets'), play: $('play'), bounce: $('bounce'), tape: $('tape'),
-      stutter: $('stutter'), test: $('test'), outputs: $('outputs'), scan: $('scan'),
-      mic: $('mic'), upload: $('upload'), bpm: $('bpm'), bpmOut: $('bpmOut'),
-      screw: $('screw'), screwOut: $('screwOut'), grid: $('grid'), status: $('status'),
-      meterFill: $('meterFill'), position: $('position')
-    };
-    ensureAudio();
+  // ---------------------------------------------------------------- start
+  function init() {
+    var e = el();
+    preview = makePreview();
+    if (!preview) { status('this browser has no Web Audio.'); return; }
     renderPresets();
+    renderMixer();
+    renderKeys();
     renderGrid();
-    el.bpm.value = engine.state.bpm;
-    el.bpmOut.textContent = engine.state.bpm + ' bpm';
-    el.screw.value = engine.state.screw;
-    el.screwOut.textContent = engine.state.screw + ' st';
-    wire();
-    status('press play. 64 bpm, C minor, 808 glide at 96 ms.');
+    syncTransport();
+
+    e.play.onclick = togglePlay;
+    e.tape.onclick = function () { ensureAudio(); engine.tapeStop(null, 0.55); status('tape stop'); };
+    e.stutter.onclick = function () { ensureAudio(); engine.stutter(null, 0.12); status('stutter'); };
+    e.bounce.onclick = bounce;
+
+    e.bpm.oninput = function () {
+      ensureAudio();
+      var v = Number(e.bpm.value);
+      if (engine) engine.setBpm(v);
+      preview.setBpm(v);
+      e.bpmOut.textContent = v + ' bpm';
+    };
+    e.screw.oninput = function () {
+      ensureAudio();
+      var st = Number(e.screw.value);
+      if (engine) engine.setScrew(st);
+      preview.setScrew(st);
+      e.screwOut.textContent = st + ' st';
+    };
+
+    $('testtone').onclick = function () {
+      ensureAudio();
+      if (ctx.state === 'suspended') ctx.resume();
+      engine.testToneDirect(0.9);
+      status('test tone straight to the speakers, nothing in between');
+    };
+    $('search').onclick = function () { searchDevices(); };
+    $('bt').onclick = function () { bluetooth(); };
+    $('mic').onclick = function () { armMic(); };
+    $('upload').onclick = function () { e.file.click(); };
+    e.file.onchange = function () {
+      if (e.file.files && e.file.files[0]) playUpload(e.file.files[0]);
+    };
+    e.outputs.onchange = function () { routeOutput(e.outputs.value); };
+
+    if (navigator.mediaDevices && navigator.mediaDevices.addEventListener) {
+      navigator.mediaDevices.addEventListener('devicechange', searchDevices);
+    }
+    searchDevices();
+
+    status('ready. press play, or hit test speakers to check the output.');
   }
 
-  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
-  else boot();
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+  else init();
 })();
 </script>
 </body>
