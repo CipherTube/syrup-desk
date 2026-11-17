@@ -1366,6 +1366,11 @@ function selfTest() {
     return new Uint8Array(data.buffer);
   }
 
+  window.addEventListener('error', function (e) {
+    var s = document.getElementById('status');
+    if (s) s.textContent = 'ERR: ' + e.message + ' @ ' + (e.filename || '').slice(-22) + ':' + e.lineno;
+  });
+
   function init() {
     defaults();
     buildStrips();
@@ -1377,7 +1382,7 @@ function selfTest() {
     wireKeys();
     wireIO();
     chipState();
-    status('tap play. ' + (60 / SyrupEngine.PRESETS[key].bpm).toFixed(2) + ' s per beat, 64 bpm, C minor, 808 glide at 96 ms.');
+    status('ready. ' + (60 / SyrupEngine.PRESETS[key].bpm).toFixed(2) + ' s per beat, 64 bpm, C minor, 808 glide at 96 ms.');
     document.addEventListener('pointerdown', function once() {
       ensureAudio();
       document.removeEventListener('pointerdown', once);
