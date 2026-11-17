@@ -106,7 +106,7 @@ footer{color:#5d534e;font-size:9px;margin-top:22px;letter-spacing:.08em}
     <button id="tapetop">tape stop</button>
     <button id="stutter">stutter</button>
     <button id="scratchnudge">scratch</button>
-    <button id="testtone">test speakers</button>
+    <button id="testtone">test speakers</button><button id="selftest">self test</button><button id="queue">queue</button>
     <button id="download">download wav</button>
   </div>
   <div class="transport" style="margin-top:8px">
@@ -1268,6 +1268,36 @@ function createSyrup(ctx, options) {
         }).catch(function () { status('could not decode that file'); });
       };
       reader.readAsArrayBuffer(f);
+    };
+
+// self test: render the current desk offline and report what came out
+function selfTest() {
+  var Offline = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+  var off = new Offline(2, Math.ceil(44100 * 9), 44100);
+  var copy = SyrupEngine.createSyrup(off, { preset: key });
+  CHANNELS.forEach(function (c) { copy.setChannel(c.id, mix[c.id]); });
+  copy.setMaster(masterMix);
+  copy.setFx(fx);
+  var from = copy.firstHeavyBar();
+  for (var b = 0; b < 2; b++) copy.scheduleBar(from + b, 0.05 + b * copy.barSeconds());
+  return off.startRendering().then(function (buf) {
+    var d = buf.getChannelData(0), sum = 0, peak = 0;
+    for (var i = 0; i < d.length; i++) {
+      sum += d[i] * d[i];
+      if (Math.abs(d[i]) > peak) peak = Math.abs(d[i]);
+    }
+    var rms = Math.sqrt(sum / d.length);
+    status('engine test - rms ' + rms.toFixed(3) + ', peak ' + peak.toFixed(2) +
+      (rms > 0.02 ? ' - mixer, grid and 808 all sound' : ' - silent, trace it'));
+    return rms;
+  });
+}
+
+    $('selftest').onclick = function () { ensureAudio(); status('testing...'); selfTest(); };
+    $('queue').onclick = function () {
+      autoAdvance = !autoAdvance;
+      $('queue').classList.toggle('on', autoAdvance);
+      status(autoAdvance ? 'queue on, advances at the loop' : 'queue off');
     };
 
     $('download').onclick = async function () {
